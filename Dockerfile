@@ -9,7 +9,7 @@ RUN --mount=type=secret,id=build_ca \
 
 FROM dependencies AS build
 COPY . .
-RUN npm run db:generate:portable && npm run build
+RUN npm run build
 
 # Run once per release with a separate migration-role DATABASE_URL.
 # Keep this image private: it contains administrative tooling, but no credentials.

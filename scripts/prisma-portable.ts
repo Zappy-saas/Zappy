@@ -1,4 +1,4 @@
-/** Local development fallback for environments that cannot fetch Prisma native engines.
+/** Build-time client generation without downloading native engines; local-only migrations.
  * Uses Prisma's pinned npm-distributed generator and WASM migration engine.
  * Internal APIs are version-sensitive: upgrade these packages together and run integration tests.
  */
