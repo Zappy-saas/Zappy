@@ -1,3 +1,5 @@
+> Histórico do planejamento inicial. Para o estado atual de cada funcionalidade, consulte [o guia do monorepo](monorepo.md) e [as rotas](routes.md).
+
 # Etapas e critérios de conclusão
 
 ## 1. Fundação — implementada nesta entrega

@@ -1,0 +1,7 @@
+[build]
+  command = "npm run db:generate:portable && npm run build --workspace=@zappy/mesa"
+  publish = "apps/mesa/.next"
+[build.environment]
+  NODE_VERSION = "24"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

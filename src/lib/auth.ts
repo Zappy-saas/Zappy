@@ -12,7 +12,7 @@ export async function createSession(userId: string, membershipId: string) {
 export async function getPrincipal() {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token || !/^[a-f0-9]{64}$/.test(token)) return null;
-  const session = await db.authSession.findUnique({where: {tokenHash: tokenDigest(token)}, include: {membership: {include: {restaurant: true, user: {select: {id: true, name: true, email: true}}}}}});
+  const session = await db.authSession.findUnique({where: {tokenHash: tokenDigest(token)}, include: {membership: {include: {restaurant: true, user: {select: {id: true, name: true, email: true, platformAdmin: true}}}}}});
   if (!session || session.expiresAt <= new Date() || !session.membership.active || !session.membership.restaurant.active || session.userId !== session.membership.userId) return null;
   return session.membership;
 }

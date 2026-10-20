@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+}
+enum Role {
+  OWNER
+  MANAGER
+  WAITER
+  KITCHEN
+  CASHIER
+}
+model Restaurant {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  memberships RestaurantMembership[]
+  auditLogs AuditLog[]
+  resources Resource[]
+  tableAccess TableAccess[]
+  orders Order[]
+}
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  name String
+  passwordHash String
+  platformAdmin Boolean @default(false)
+  createdAt DateTime @default(now())
+  memberships RestaurantMembership[]
+  sessions AuthSession[]
+}
+model RestaurantMembership {
+  id String @id @default(cuid())
+  restaurantId String
+  userId String
+  role Role
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+  sessions AuthSession[]
+  auditLogs AuditLog[]
+  @@unique([restaurantId, userId])
+  @@unique([id, restaurantId])
+  @@unique([id, userId])
+  @@index([userId, active])
+}
+model AuthSession {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  userId String
+  membershipId String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  membership RestaurantMembership @relation(fields: [membershipId, userId], references: [id, userId], onDelete: Cascade)
+  @@index([expiresAt])
+  @@index([userId])
+}
+model AuditLog {
+  id String @id @default(cuid())
+  restaurantId String
+  actorMembershipId String
+  action String
+  createdAt DateTime @default(now())
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  actor RestaurantMembership @relation(fields: [actorMembershipId, restaurantId], references: [id, restaurantId], onDelete: Restrict)
+  @@index([restaurantId, createdAt])
+}
+model LoginAttempt {
+  key String @id
+  count Int @default(1)
+  windowStartedAt DateTime @default(now())
+}
+
+model Resource {
+  id String @id @default(cuid())
+  restaurantId String
+  kind String
+  data Json
+  enabled Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  tableAccess TableAccess[]
+  @@unique([id, restaurantId])
+  @@index([restaurantId, kind])
+}
+model TableAccess {
+  id String @id @default(cuid())
+  restaurantId String
+  tableId String
+  tokenHash String @unique
+  active Boolean @default(true)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  table Resource @relation(fields: [tableId, restaurantId], references: [id, restaurantId], onDelete: Restrict)
+  orders Order[]
+  @@unique([id, restaurantId])
+  @@index([restaurantId, tableId])
+}
+model Order {
+  id String @id @default(cuid())
+  restaurantId String
+  accessId String
+  requestKey String
+  status String @default("RECEIVED")
+  items Json
+  total Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  access TableAccess @relation(fields: [accessId, restaurantId], references: [id, restaurantId], onDelete: Restrict)
+  @@unique([accessId, requestKey])
+  @@index([restaurantId, status, createdAt])
+}
+model Activity {
+  id String @id @default(cuid())
+  restaurantId String?
+  actorUserId String?
+  action String
+  subjectId String?
+  createdAt DateTime @default(now())
+  @@index([restaurantId, createdAt])
+}
+model PlatformRecord {
+  id String @id @default(cuid())
+  kind String
+  data Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([kind])
+}

@@ -13,7 +13,7 @@ export async function authorize(permission: Permission) {
 }
 export function assertOrigin(request: Request) {
   if (!process.env.APP_ORIGIN) throw new Error('APP_ORIGIN is required');
-  if (request.headers.get('origin') !== process.env.APP_ORIGIN) throw new ApiError(403, 'Origem da solicitação não permitida.');
+  if (![process.env.APP_ORIGIN, ...(process.env.APP_ORIGINS ?? '').split(',').map(v => v.trim()).filter(Boolean)].includes(request.headers.get('origin') ?? '')) throw new ApiError(403, 'Origem da solicitação não permitida.');
   if (request.headers.get('sec-fetch-site') === 'cross-site') throw new ApiError(403, 'Solicitação entre sites bloqueada.');
 }
 export async function jsonBody(request: Request) {
@@ -34,6 +34,7 @@ export async function jsonBody(request: Request) {
 }
 export function fail(error: unknown) {
   if (error instanceof ApiError) return NextResponse.json({error: error.message}, {status: error.status});
+  if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') return NextResponse.json({error: 'Já existe um registro com esse e-mail ou identificador.'}, {status: 409});
   if (error instanceof ZodError) return NextResponse.json({error: 'Revise os campos informados.', fields: error.flatten().fieldErrors}, {status: 400});
   console.error(JSON.stringify({event: 'request.failed', type: error instanceof Error ? error.name : 'UnknownError'}));
   return NextResponse.json({error: 'Não foi possível concluir. Tente novamente em instantes.'}, {status: 500});

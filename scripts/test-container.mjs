@@ -35,8 +35,8 @@ try {
   for(const file of ['ca.crt','server.crt','server.key']) docker(['cp',join(scratch,file),`${database}:/tmp/${file}`]);
   docker(['start',database]);
   await until(()=>spawnSync('docker',['exec',database,'pg_isready','-U','zappy','-d','zappy'],{stdio:'ignore'}).status===0);
-  for(const migration of readdirSync(join(root,'prisma/migrations')).filter(n=>/^\d/.test(n)).sort()) {
-    docker(['exec','-i',database,'psql','-U','zappy','-d','zappy','-v','ON_ERROR_STOP=1'],{input:readFileSync(join(root,'prisma/migrations',migration,'migration.sql'),'utf8')});
+  for(const migration of readdirSync(join(root,'packages/database/prisma/migrations')).filter(n=>/^\d/.test(n)).sort()) {
+    docker(['exec','-i',database,'psql','-U','zappy','-d','zappy','-v','ON_ERROR_STOP=1'],{input:readFileSync(join(root,'packages/database/prisma/migrations',migration,'migration.sql'),'utf8')});
   }
   // Real fixture account, generated only in this isolated database.
   const {hashPassword}=await import('../src/lib/password.ts');

@@ -2,7 +2,9 @@
 
 **Seu pedido, sem espera.** Plataforma brasileira de autoatendimento para restaurantes.
 
-Este repositório contém a **primeira etapa funcional (fundação)**. Não é o sistema completo nem está homologado para produção. O painel é conectado a PostgreSQL real, sem indicadores financeiros fictícios.
+Este repositório contém o **monorepo operacional da Zappy**, com quatro aplicativos Next.js, uma API e um site integrado compatível com o deploy existente no Netlify. Dados vêm do PostgreSQL real. Pagamentos e terminais ainda dependem de integração/homologação; a plataforma completa não está pronta para produção.
+
+Veja [execução, publicação e limitações do monorepo](docs/monorepo.md), [todas as rotas](docs/routes.md) e [configuração Netlify](docs/netlify.md).
 
 ## Funciona nesta entrega
 
@@ -15,7 +17,12 @@ Este repositório contém a **primeira etapa funcional (fundação)**. Não é o
 - Suspensão de restaurante/revogação de vínculo invalida o acesso nas próximas requisições.
 - Proteção de origem nas mutações, validação Zod, limite de corpo e rate limit de login compartilhado pelo banco.
 
-**Ainda não implementados:** cardápio, pedidos, tablets, KDS, tempo real, contas, pagamentos, administração SaaS, convites, recuperação de senha e implantação de produção. Veja [as fases](docs/roadmap.md).
+- Catálogo, produtos, mesas, inventário de tablets/terminais, pareamento de mesa, carrinho e pedidos persistentes.
+- Cozinha com estados validados, eventos SSE autenticados e recuperação por consulta periódica.
+- Conta por sessão, estimativa de divisão, chamados de atendimento e relatórios básicos.
+- Administração de plataforma com autorização própria, cadastro de restaurantes/proprietários, planos e assinaturas.
+
+**Pendentes:** pagamentos reais, homologação de terminais, liquidação/divisão persistente de contas, faturamento de assinaturas, convites, recuperação de senha e validação da implantação pública. Consulte o escopo detalhado no guia do monorepo.
 
 ## Stack
 

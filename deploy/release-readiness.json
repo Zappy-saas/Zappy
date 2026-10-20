@@ -1,6 +1,26 @@
 {
   "scope": "complete-zappy-platform",
-  "implemented": ["restaurant-foundation", "authentication", "tenant-scoping", "audit", "postgresql-migrations"],
-  "missing": ["tablet-device-authentication", "menu-and-cart", "orders-and-order-state-machine", "kitchen-panel", "authenticated-realtime-and-recovery", "digital-bills-and-splits", "platform-administrator-role-and-panel", "payment-provider-sandbox-and-homologation"],
+  "implemented": [
+    "restaurant-foundation",
+    "authentication",
+    "tenant-scoping",
+    "audit",
+    "postgresql-migrations",
+    "catalog-management",
+    "table-device-session",
+    "orders-and-state-machine",
+    "kitchen-panel",
+    "authenticated-sse-and-polling",
+    "consumption-bill",
+    "platform-admin-panel"
+  ],
+  "missing": [
+    "payment-provider-sandbox-and-homologation",
+    "terminal-hardware-integration",
+    "persistent-bill-splits-and-settlement",
+    "subscription-billing",
+    "production-realtime-validation",
+    "password-recovery-and-invitations"
+  ],
   "publicDeploymentVerified": false
 }

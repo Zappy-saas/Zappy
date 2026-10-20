@@ -1,11 +1,11 @@
 # Netlify
 
 Importe `Zappy-saas/Zappy`, branch `main`, sem diretório base.
-O `netlify.toml` define Node 24, comando `npm run build` e publicação `.next`.
+O `netlify.toml` define Node 24, comando `npm run build:gateway` e publicação `.next`.
 Mantenha a integração Next.js do Netlify habilitada; esta aplicação precisa de
 funções de servidor, não de exportação estática.
 
-O hook `prebuild` gera o cliente Prisma antes da compilação e da checagem de
+O comando `build:gateway` gera o cliente Prisma antes da compilação e da checagem de
 tipos, inclusive em instalações novas. Usa o mesmo gerador fixado no lockfile
 que o build Docker, sem acessar o banco nem baixar engines nativas.
 As dependências de desenvolvimento precisam estar disponíveis durante o build.
@@ -31,10 +31,16 @@ Um build local bem-sucedido não valida a execução das funções no Netlify.
 Para um banco novo, sem tabelas da Zappy, abra **SQL Editor** no Neon e selecione
 a branch e o banco usados pela `DATABASE_URL` do Netlify. Cole todo o conteúdo de
 [`deploy/neon-initial-setup.sql`](../deploy/neon-initial-setup.sql) e clique em
-**Run** uma vez. O arquivo cria as tabelas e registra as duas migrations iniciais
+**Run** uma vez. O arquivo cria as tabelas e registra as três migrations disponíveis
 com seus checksums, dentro de uma única transação.
 
 Se já houver tabelas ou histórico de migrations, o script recusa a instalação.
 Não apague tabelas para tentar novamente; use o fluxo normal de migrations.
 Esse arquivo é apenas para a instalação inicial e não cria contas de acesso.
 Atualizações posteriores devem usar `npm run db:migrate`.
+
+## Banco que já possui a base inicial
+
+Antes de publicar os novos painéis, execute [a atualização operacional](../deploy/neon-operations-upgrade.sql) inteira no SQL Editor do Neon, ou use `npm run db:migrate`. Não execute a instalação inicial novamente. O novo deploy precisa da coluna `platformAdmin` e das tabelas operacionais.
+
+Veja [o guia do monorepo](monorepo.md) para sites separados e subdomínios.

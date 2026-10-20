@@ -6,9 +6,9 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "dev": "next dev --hostname 0.0.0.0",
+    "dev": "node scripts/workspaces.mjs dev",
     "prebuild": "npm run db:generate:portable",
-    "build": "next build",
+    "build": "node scripts/workspaces.mjs build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts tests/*.test.mjs",
@@ -23,7 +23,18 @@
     "db:migrate:portable": "tsx scripts/prisma-portable.ts migrate",
     "deploy:check": "node deploy/runtime-config.mjs",
     "release:check": "node deploy/check-release.mjs",
-    "test:container": "tsx scripts/test-container.mjs"
+    "test:container": "tsx scripts/test-container.mjs",
+    "dev:gateway": "next dev --hostname 0.0.0.0",
+    "build:gateway": "npm run db:generate:portable && next build",
+    "lint": "tsc --noEmit",
+    "dev:api": "npm run dev --workspace=@zappy/api",
+    "dev:mesa": "npm run dev --workspace=@zappy/mesa",
+    "dev:restaurante": "npm run dev --workspace=@zappy/restaurante",
+    "dev:cozinha": "npm run dev --workspace=@zappy/cozinha",
+    "dev:admin": "npm run dev --workspace=@zappy/admin",
+    "admin:grant": "tsx scripts/platform-admin.ts",
+    "check:structure": "node scripts/check-structure.mjs",
+    "test:workspaces": "tsx scripts/test-workspaces.ts"
   },
   "dependencies": {
     "@fontsource/rethink-sans": "^5.3.0",
@@ -56,5 +67,9 @@
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

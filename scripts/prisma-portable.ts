@@ -13,7 +13,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 async function main() {
   const command = process.argv[2];
   const root = path.resolve(import.meta.dirname, '..');
-  const schemaPath = path.join(root, 'prisma/schema.prisma');
+  const schemaPath = path.join(root, 'packages/database/prisma/schema.prisma');
   if (command === 'generate') {
     const generators = await getGenerators({schemaPath, registry: {'prisma-client-js': {type: 'in-process', generator: new PrismaClientJsGenerator({cliCommand: 'generate', runtimePath: path.join(root, 'node_modules/@prisma/client/runtime')})}}, skipDownload: true, cliCommand: 'generate'});
     try { for (const generator of generators) await generator.generate(); }
@@ -26,7 +26,7 @@ async function main() {
   if (!connectionString) throw new Error('DATABASE_URL is required.');
   const url = new URL(connectionString);
   if (!['localhost', '127.0.0.1'].includes(url.hostname) || process.env.NODE_ENV === 'production') throw new Error('Portable migration runner is restricted to local development. Use prisma migrate deploy for production.');
-  const baseDir = path.join(root, 'prisma/migrations');
+  const baseDir = path.join(root, 'packages/database/prisma/migrations');
   const entries = await readdir(baseDir, {withFileTypes: true});
   const migrationDirectories = await Promise.all(entries.filter(e=>e.isDirectory()).sort((a,b)=>a.name.localeCompare(b.name)).map(async e=>({path:e.name,migrationFile:{path:'migration.sql',content:{tag:'ok' as const,value:await readFile(path.join(baseDir,e.name,'migration.sql'),'utf8')}}})));
   const adapter = bindMigrationAwareSqlAdapterFactory(new PrismaPg({connectionString}));

@@ -1,3 +1,27 @@
+# Validação do monorepo — 20/10/2026
+
+- 56 rotas frontend verificadas fisicamente nos aplicativos e no site integrado; 17 módulos de API.
+- Builds de mesa, restaurante, cozinha, admin, API e gateway passaram.
+- TypeScript passou. O comando lint atualmente usa TypeScript, sem ESLint.
+- 8 testes unitários/configuração passaram.
+- 10 testes de fundação e 7 testes operacionais passaram (Playwright + PostgreSQL real local).
+- Fluxo de navegador: catálogo → produto → carrinho → confirmação; consulta da cozinha, histórico e conta via API.
+- Testes operacionais verificaram idempotência concorrente, cálculo de preço no servidor, isolamento entre restaurantes, papéis, revogação de tablet, SSE e autorização de plataforma.
+- Cadastro administrativo de restaurante/proprietário validado com login real da conta recém-criada.
+- Screenshots locais inspecionados em tablet horizontal; testes da fundação também cobrem 390, 1280 e 1920 pixels.
+- Cinco aplicativos iniciados juntos; saúde, login e consulta autenticada passaram através de cada porta/proxy.
+- SQL de instalação nova e atualização da base anterior executados em bancos locais descartáveis.
+- Docker runtime compilado e teste isolado passou: autenticação, TLS verificado, cookies seguros, bloqueio de origem, backup/restauração e recusa de restauração sobre banco não vazio.
+
+Os testes usam dados descartáveis explicitamente de teste, limpos ao término. Não criam conta padrão nem executam no Neon do usuário.
+O primeiro teste de navegação encontrou um seletor de teste incorreto para a mensagem de acesso negado; o seletor foi corrigido e a suíte operacional passou integralmente.
+
+**Não verificado:** deploy público Netlify, DNS dos subdomínios, SSE no provedor, migrations no Neon do usuário, pagamentos ou terminais físicos. Veja [limites funcionais](monorepo.md) e [situação de cada rota](routes.md).
+
+---
+
+## Registro anterior da fundação
+
 # Evidências de validação — 20/10/2026
 
 Ambiente: Node 24.19.0, Next.js 16.4.2, Prisma 7.10.1, PostgreSQL 17 em Docker, Chromium instalado na máquina. Banco real e servidor iniciado a partir do build de produção, sem mocks de persistência.

@@ -18,6 +18,8 @@ jobs:
       - run: npm run db:generate:portable
       - run: npm run typecheck
       - run: npm test
+      - run: node scripts/check-structure.mjs
+      - run: npm run build
       - run: docker build --target runtime -t zappy:staging-candidate .
       - run: npm run test:container
 # No deployment or registry push: production access and complete product are still pending.
