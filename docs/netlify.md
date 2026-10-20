@@ -25,3 +25,16 @@ O comando de migração portátil continua restrito ao desenvolvimento local.
 Depois do push, acompanhe o deploy automático ou use **Trigger deploy** no
 Netlify. Verifique `/api/health` e o login na URL publicada.
 Um build local bem-sucedido não valida a execução das funções no Netlify.
+
+## Primeira instalação pelo editor do Neon
+
+Para um banco novo, sem tabelas da Zappy, abra **SQL Editor** no Neon e selecione
+a branch e o banco usados pela `DATABASE_URL` do Netlify. Cole todo o conteúdo de
+[`deploy/neon-initial-setup.sql`](../deploy/neon-initial-setup.sql) e clique em
+**Run** uma vez. O arquivo cria as tabelas e registra as duas migrations iniciais
+com seus checksums, dentro de uma única transação.
+
+Se já houver tabelas ou histórico de migrations, o script recusa a instalação.
+Não apague tabelas para tentar novamente; use o fluxo normal de migrations.
+Esse arquivo é apenas para a instalação inicial e não cria contas de acesso.
+Atualizações posteriores devem usar `npm run db:migrate`.
