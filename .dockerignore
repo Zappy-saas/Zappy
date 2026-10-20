@@ -1,0 +1,16 @@
+.git
+.next
+node_modules
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+test-results
+playwright-report
+attachments
+*.log
+*.dump
+*.backup
+*.key
+*.pem
+deploy/*.env

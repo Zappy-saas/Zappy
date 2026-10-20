@@ -1,0 +1,6 @@
+{
+  "scope": "complete-zappy-platform",
+  "implemented": ["restaurant-foundation", "authentication", "tenant-scoping", "audit", "postgresql-migrations"],
+  "missing": ["tablet-device-authentication", "menu-and-cart", "orders-and-order-state-machine", "kitchen-panel", "authenticated-realtime-and-recovery", "digital-bills-and-splits", "platform-administrator-role-and-panel", "payment-provider-sandbox-and-homologation"],
+  "publicDeploymentVerified": false
+}

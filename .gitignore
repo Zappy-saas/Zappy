@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+test-results/
+playwright-report/
+# Deployment secrets and database archives
+*.dump
+*.backup
+*.key
+*.pem
+deploy/*.env
